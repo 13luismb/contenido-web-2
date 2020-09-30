@@ -1,3 +1,3 @@
-module.exports.getTime = () => {
+export const getTime = () => {
     return new Date().getTime();
 }
