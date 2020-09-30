@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 const router = Router();
-const time = require('./time');
+import time from './time';
 
 router.use('/time', time);
 
