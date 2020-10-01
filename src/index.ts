@@ -1,5 +1,6 @@
-const express = require('express');
-const router = require('./routes');
+import express from 'express';
+import router from './routes';
+
 const app = express();
 
 app.use('/views', express.static(__dirname + '/public'));
