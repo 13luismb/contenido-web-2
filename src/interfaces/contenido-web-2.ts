@@ -7,3 +7,7 @@ export interface Usuario {
   telefono: string;
   direccion: string;
 }
+
+export interface UsuarioLogin extends Usuario {
+  password: string;
+}

@@ -1,5 +1,5 @@
 CREATE TABLE "user" (
-  "id_usuario" integer PRIMARY KEY,
+  "id_usuario" SERIAL PRIMARY KEY,
   "nombre_completo" varchar,
   "nombre_usuario" varchar,
   "password" varchar,
