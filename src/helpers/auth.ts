@@ -11,9 +11,10 @@ export const signUpUser = async (body: UsuarioLogin): Promise<Usuario> => {
   const client: PoolClient = await pool.connect();
   const { username, nombreCompleto, direccion, documento, tipoDocumento, telefono, password } = body;
   try {
+    await client.query('BEGIN');
     const salt = genSaltSync(10);
     const hashedPassword = hashSync(password, salt);
-    const response = (await client.query(queries.SIGN_UP_USER, [username, hashedPassword, nombreCompleto, documento, tipoDocumento, telefono, direccion])).rows[0];
+    const response = (await client.query(queries.SIGN_UP_USER, [username.toLowerCase(), hashedPassword, nombreCompleto, documento, tipoDocumento, telefono, direccion])).rows[0];
     const user: Usuario = {
       id: response.id_usuario,
       nombreCompleto: response.nombre_completo,
@@ -23,8 +24,10 @@ export const signUpUser = async (body: UsuarioLogin): Promise<Usuario> => {
       telefono: response.telefono,
       direccion: response.direccion,
     };
+    await client.query('COMMIT');
     return user;
   } catch (e) {
+    await client.query('ROLLBACK');
     throw e;
   } finally {
     client.release();

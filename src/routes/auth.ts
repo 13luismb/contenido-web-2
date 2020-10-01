@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { isLogged, isAuth, signUpFieldsValidation, loginFieldsValidation } from '@validations/auth';
+import { isLogged, isAuth } from '@validations/auth';
+import { signUpFieldsValidation, loginFieldsValidation, checkResult } from '@validations/fields';
 import { passportAuth } from '@middlewares/middleware';
 import { signUpUser } from '@helpers/auth';
 const router = Router();
@@ -9,7 +10,7 @@ router.get('/logout', isAuth, (req: any, res) => {
   res.json({ status: 200, message: 'Sesión finalizada.' });
 });
 
-router.post('/signup', signUpFieldsValidation, async (req, res) => {
+router.post('/signup', signUpFieldsValidation, checkResult, async (req, res) => {
   try {
     const data = await signUpUser(req.body);
     res.status(200).json({ status: 200, usuario: data, message: 'Usuario registrado satisfactoriamente' });
@@ -18,6 +19,6 @@ router.post('/signup', signUpFieldsValidation, async (req, res) => {
   }
 });
 
-router.post('/user', isLogged, loginFieldsValidation, passportAuth);
+router.post('/user', isLogged, loginFieldsValidation, checkResult, passportAuth);
 
 export default router;

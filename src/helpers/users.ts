@@ -55,6 +55,7 @@ export const updateUser = async ({ user, id }: { user: Usuario; id: number }): P
   const client: PoolClient = await pool.connect();
   const { username, nombreCompleto, direccion, documento, tipoDocumento, telefono } = user;
   try {
+    await client.query('BEGIN');
     const response = (await client.query(queries.UPDATE_USER, [username, nombreCompleto, documento, tipoDocumento, telefono, direccion, id])).rows[0];
     const user: Usuario = {
       id: response.id_usuario,
@@ -65,8 +66,11 @@ export const updateUser = async ({ user, id }: { user: Usuario; id: number }): P
       telefono: response.telefono,
       direccion: response.direccion,
     };
+    await client.query('COMMIT');
     return user;
   } catch (e) {
+    client.query('ROLLBACK');
+    console.log(e);
     throw e;
   } finally {
     client.release();
@@ -76,9 +80,12 @@ export const updateUser = async ({ user, id }: { user: Usuario; id: number }): P
 export const deleteUser = async (id: number): Promise<boolean> => {
   const client: PoolClient = await pool.connect();
   try {
+    await client.query('BEGIN');
     const response = (await client.query(queries.DELETE_USER, [id])).rowCount > 0;
+    await client.query('COMMIT');
     return response;
   } catch (e) {
+    await client.query('ROLLBACK');
     throw e;
   } finally {
     client.release();
