@@ -1,6 +1,7 @@
 import './config/aliases';
 import express from 'express';
 import router from './routes';
+
 const app = express();
 
 app.use('/views', express.static(__dirname + '/public'));

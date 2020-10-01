@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTime } from '../helpers/time';
+import { getTime } from '@helpers/time';
 const router = Router();
 
 router.get('/', async (req, res) => {

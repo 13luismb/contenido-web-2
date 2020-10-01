@@ -10,10 +10,8 @@ export default class Pool {
     if (!Pool.instance) {
       const opt: PoolConfig = {
         connectionString: process.env.DATABASE_URL,
-        ssl: true,
         max: 500,
         min: 100,
-        // query_timeout: 15000,
       };
       Pool.instance = new PgPool(opt);
     }
