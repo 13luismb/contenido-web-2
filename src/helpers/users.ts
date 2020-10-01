@@ -13,7 +13,7 @@ export const getUsers = async (): Promise<Usuario[]> => {
         id: row.id_usuario,
         nombreCompleto: row.nombre_completo,
         username: row.nombre_usuario,
-        documento: row.cedula,
+        documento: row.documento,
         tipoDocumento: row.tipo_documento,
         telefono: row.telefono,
         direccion: row.direccion,
