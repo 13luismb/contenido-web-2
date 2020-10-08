@@ -3,7 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import cors from 'cors';
-import { LocalStrategy } from '@utils/Strategies';
+import { LocalStrategy, JwtStrategy } from '@utils/Strategies';
 import router from './routes';
 
 const app = express();
@@ -13,15 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
-    secret: 'keyboardcat',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
-app.use(
-  cors({
-    origin: true,
+    secret: process.env.SESSION_SECRET || 'octocat',
+    resave: true,
+    saveUninitialized: true,
   })
 );
 
@@ -29,6 +23,7 @@ app.get('/', (req: any, res: any) => {
   res.redirect('views/index.html');
 });
 
+passport.use('jwt', JwtStrategy);
 passport.use(LocalStrategy);
 
 passport.serializeUser((user, done) => {
@@ -40,8 +35,16 @@ passport.deserializeUser((user: string, done) => {
 });
 
 app.use(passport.initialize());
-
 app.use(passport.session());
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: 'POST, PUT, GET, DELETE, OPTIONS, PATCH',
+    allowedHeaders: 'Accept, Content-Type, Accept-Encoding, Content-Length, Authorization',
+  })
+);
 
 app.use('/', router);
 

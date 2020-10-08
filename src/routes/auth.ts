@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { isLogged, isAuth } from '@validations/auth';
 import { signUpFieldsValidation, loginFieldsValidation, checkResult } from '@validations/fields';
-import { passportAuth } from '@middlewares/middleware';
+import { authenticate } from 'passport';
 import { signUpUser } from '@helpers/auth';
+import { generateToken } from '@utils/Strategies';
 const router = Router();
 
 router.get('/logout', isAuth, (req: any, res) => {
@@ -19,6 +20,13 @@ router.post('/signup', signUpFieldsValidation, checkResult, async (req, res) => 
   }
 });
 
-router.post('/user', isLogged, loginFieldsValidation, checkResult, passportAuth);
+router.post('/user', loginFieldsValidation, checkResult, authenticate('local'), async (req: any, res) => {
+  res.status(200).json({
+    status: 200,
+    message: 'Inicio de sesion exitoso',
+    usuario: req.user,
+    token: generateToken(req.user),
+  });
+});
 
 export default router;
