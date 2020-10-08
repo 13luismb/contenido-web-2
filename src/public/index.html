@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>oli</h1>
+    <button id="btn">presiona aki</button>
+    <h2 id="time"></h2>
+    <button id="btn-2">presiona aki 2</button>
+  </body>
+  <script>
+    const btn = document.getElementById('btn');
+    const btn2 = document.getElementById('btn-2');
+
+    const getTime = async () => {
+      const response = await (await fetch('./../time')).json();
+      console.log(response);
+      document.getElementById('time').innerText += response.time;
+    };
+
+    const getUsers = async () => {
+      const response = await (await fetch('./../users')).json();
+      console.log(response);
+      btn2.innerHTML = 'espero tengai la consola abierta';
+    };
+
+    btn.addEventListener('click', getTime);
+    btn2.addEventListener('click', getUsers);
+  </script>
+</html>
