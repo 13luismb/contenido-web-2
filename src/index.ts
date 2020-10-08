@@ -2,6 +2,7 @@ import './config/aliases';
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
+import cors from 'cors';
 import { LocalStrategy } from '@utils/Strategies';
 import router from './routes';
 
@@ -15,6 +16,12 @@ app.use(
     secret: 'keyboardcat',
     resave: false,
     saveUninitialized: false,
+  })
+);
+
+app.use(
+  cors({
+    origin: true,
   })
 );
 
